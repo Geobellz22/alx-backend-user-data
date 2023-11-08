@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""A module for filtering logs
-"""
+"""filter_datum that returns the log message obfuscated"""
 
 import re
-from typing import List
 
 
-
- def filter_datum(fields: str,
-                  redaction: str,
-                  message: str,
-                  separator: str) -> str:
-    """returns the log message obsfuscated"""
-    return re.sub(f'({separator})({separator.join(fields)})',
-                  f'\\1{redaction}', message)
+def filter_datum(fields: str,
+                 redaction: str,
+                 message: str,
+                 separator: str) -> str:
+    """returns the log message obfuscated"""
+    pw = r'(?<=password=)[a-z]+'
+    dt = r'(?<=date_of_birth=)\d{2}/\d{2}/\d{4}'
+    return re.sub(pw, redaction, re.sub(dt, redaction, message))
