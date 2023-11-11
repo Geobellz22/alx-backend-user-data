@@ -6,22 +6,22 @@ from typing import List, TypeVar
 
 
 class Auth:
-    """Method to check if authentication is required"""
+    """Class to manage API authentication"""
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Require auth method"""
+        """Method to check if authentication is required"""
         if path is None or excluded_paths is None or excluded_paths == []:
             return True
 
         if len(path) == 14:
             path = f"{path}/"
 
-        if path in excluded_paths:
-            return False
+        return path not in excluded_paths
 
     def authorization_header(self, request=None) -> str:
-        """Returns None"""
+        """Method to get the authorization header"""
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """Returns None"""
+        """Method to get the current user"""
         return None
