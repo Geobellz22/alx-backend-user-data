@@ -31,6 +31,11 @@ def before_request():
             'api/v1/unauthorized/',
             'api/v1/forbidden/'
         ]
+
+        # Skip authorization checks for /api/v1/status
+        if request.path == '/api/v1/status/':
+            return
+
         if auth.require_auth(request.path, excluded_paths):
             if auth.authorization_header(request) is None:
                 abort(401)
