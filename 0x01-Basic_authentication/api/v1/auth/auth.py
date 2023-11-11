@@ -2,7 +2,7 @@
 """class Auth to manage API"""
 
 from flask import request
-from typing import List,
+from typing import List
 
 
 class Auth:
