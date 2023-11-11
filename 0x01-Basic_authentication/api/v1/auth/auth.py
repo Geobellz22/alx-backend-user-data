@@ -9,7 +9,7 @@ class Auth:
     """Method to check if authentication is required"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Require auth method"""
-        if path is None or excluded_paths is None or excluded_paths == []:
+        if path is None or excluded_paths is None or not excluded_paths == []:
             return True
 
         if len(path) == 14:
