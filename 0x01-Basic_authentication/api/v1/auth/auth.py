@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """class Auth to manage API"""
 
-from typing import List, TypeVar
 from flask import request
+from typing import List, TypeVar
 
 class Auth:
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
