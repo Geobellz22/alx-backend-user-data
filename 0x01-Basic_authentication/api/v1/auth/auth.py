@@ -15,8 +15,19 @@ class Auth:
 
         if len(path) == 14:
             path = f"{path}/"
+         if path in excluded_paths:
+            return False
 
-        return path not in excluded_paths
+        for ex_path in excluded_paths:
+            if ex_path.startswith(path):
+                return False
+            elif path.startswith(ex_path):
+                return False
+            if ex_path[-1] == "*":
+                if path.startswith(ex_path[:-1]):
+                    return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """Method to get the authorization header"""
