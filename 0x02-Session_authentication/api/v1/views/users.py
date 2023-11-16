@@ -1,34 +1,41 @@
 #!/usr/bin/env python3
-""" Module of Users views
 """
+Module containing User views.
+"""
+
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
 
-
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def view_all_users() -> str:
-    """ GET /api/v1/users
-    Return:
-      - list of all User objects JSON represented
+    """
+    Retrieve a list of all User objects.
+
+    Returns:
+        - JSON representation of a list containing all User objects.
     """
     all_users = [user.to_json() for user in User.all()]
     return jsonify(all_users)
 
-
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def view_one_user(user_id: str = None) -> str:
-    """ GET /api/v1/users/:id
-    Path parameter:
-      - User ID
-    Return:
-      - User object JSON represented
-      - 404 if the User ID doesn't exist
+    """
+    Retrieve information about a specific User.
+
+    Args:
+        user_id (str): The User ID.
+
+    Returns:
+        - JSON representation of the User object.
+        - 404 if the User ID doesn't exist.
     """
     if user_id is None:
         abort(404)
+
     if user_id == "me" and request.current_user is None:
         abort(404)
+
     if user_id == "me" and request.current_user is not None:
         return jsonify(request.current_user.to_json())
 
@@ -38,24 +45,27 @@ def view_one_user(user_id: str = None) -> str:
 
     return jsonify(user.to_json())
 
-
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id: str = None) -> str:
-    """ DELETE /api/v1/users/:id
-    Path parameter:
-      - User ID
-    Return:
-      - empty JSON is the User has been correctly deleted
-      - 404 if the User ID doesn't exist
+    """
+    Delete a User.
+
+    Args:
+        user_id (str): The User ID to delete.
+
+    Returns:
+        - Empty JSON if the User has been successfully deleted.
+        - 404 if the User ID doesn't exist.
     """
     if user_id is None:
         abort(404)
+
     user = User.get(user_id)
     if user is None:
         abort(404)
+
     user.remove()
     return jsonify({}), 200
-
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user() -> str:
