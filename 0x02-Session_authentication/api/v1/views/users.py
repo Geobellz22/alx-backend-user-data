@@ -1,83 +1,72 @@
 #!/usr/bin/env python3
+"""Module of Users views.
 """
-Module containing User views.
-"""
-
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
 
+
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def view_all_users() -> str:
-    """
-    Retrieve a list of all User objects.
-
-    Returns:
-        - JSON representation of a list containing all User objects.
+    """GET /api/v1/users
+    Return:
+      - list of all User objects JSON represented.
     """
     all_users = [user.to_json() for user in User.all()]
     return jsonify(all_users)
 
+
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def view_one_user(user_id: str = None) -> str:
-    """
-    Retrieve information about a specific User.
-
-    Args:
-        user_id (str): The User ID.
-
-    Returns:
-        - JSON representation of the User object.
-        - 404 if the User ID doesn't exist.
+    """GET /api/v1/users/:id
+    Path parameter:
+      - User ID.
+    Return:
+      - User object JSON represented.
+      - 404 if the User ID doesn't exist.
     """
     if user_id is None:
         abort(404)
-
-    if user_id == "me" and request.current_user is None:
-        abort(404)
-
-    if user_id == "me" and request.current_user is not None:
-        return jsonify(request.current_user.to_json())
-
+    if user_id == 'me':
+        if request.current_user is None:
+            abort(404)
+        else:
+            return jsonify(request.current_user.to_json())
     user = User.get(user_id)
     if user is None:
         abort(404)
-
     return jsonify(user.to_json())
+
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id: str = None) -> str:
-    """
-    Delete a User.
-
-    Args:
-        user_id (str): The User ID to delete.
-
-    Returns:
-        - Empty JSON if the User has been successfully deleted.
-        - 404 if the User ID doesn't exist.
+    """DELETE /api/v1/users/:id
+    Path parameter:
+      - User ID.
+    Return:
+      - empty JSON is the User has been correctly deleted.
+      - 404 if the User ID doesn't exist.
     """
     if user_id is None:
         abort(404)
-
     user = User.get(user_id)
     if user is None:
         abort(404)
-
     user.remove()
     return jsonify({}), 200
 
+
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def create_user() -> str:
-    """ POST /api/v1/users/
+    """POST /api/v1/users/
     JSON body:
-      - email
-      - password
-      - last_name (optional)
-      - first_name (optional)
+      - email.
+      - password.
+      - last_name (optional).
+      - first_name (optional).
     Return:
-      - User object JSON represented
-      - 400 if can't create the new User
+      - User object JSON represented.
+      - 400 if can't create the new User.
     """
     rj = None
     error_msg = None
@@ -107,16 +96,16 @@ def create_user() -> str:
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def update_user(user_id: str = None) -> str:
-    """ PUT /api/v1/users/:id
+    """PUT /api/v1/users/:id
     Path parameter:
-      - User ID
+      - User ID.
     JSON body:
-      - last_name (optional)
-      - first_name (optional)
+      - last_name (optional).
+      - first_name (optional).
     Return:
-      - User object JSON represented
-      - 404 if the User ID doesn't exist
-      - 400 if can't update the User
+      - User object JSON represented.
+      - 404 if the User ID doesn't exist.
+      - 400 if can't update the User.
     """
     if user_id is None:
         abort(404)
