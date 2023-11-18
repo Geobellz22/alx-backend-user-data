@@ -34,5 +34,11 @@ class DB:
         """Add new user"""
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
-        self._session.commit()
+
+        try:
+            self._session.commit()
+        except IntegrityError as e:
+            self._session.rollback()
+            raise ValueError(f"Error adding user: {e}")
+
         return user
