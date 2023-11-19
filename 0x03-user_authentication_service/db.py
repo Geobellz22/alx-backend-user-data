@@ -31,15 +31,10 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add new user"""
-        if email is not None and hashed_password is not None:
-            new_user = User(email=email, hashed_password=hashed_password)
-            self._session.add(new_user)
-            self._session.commit()
-            if new_user:
-                print(f"User created with id: {new_user.id}")
-            else:
-                print("Failed to create user.")
-            return new_user
-        else:
-            print("Email and hashed_password are required.")
-            return None
+        if not email or not hashed_password:
+            return
+        user = User(email=email, hashed_password=hashed_password)
+        session = self._session
+        session.add(user)
+        session.commit()
+        return user
