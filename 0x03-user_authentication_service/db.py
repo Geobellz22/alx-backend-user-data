@@ -8,11 +8,9 @@ from sqlalchemy.orm.session import Session
 
 from user import Base, User
 
-
 class DB:
     """DB class
     """
-
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
@@ -32,7 +30,7 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add new user"""
-        try:
+        if email is not None and hashed_password is not None:
             new_user = User(email=email, hashed_password=hashed_password)
             self._session.add(new_user)
             self._session.commit()
@@ -41,6 +39,6 @@ class DB:
             else:
                 print("Failed to create user.")
             return new_user
-        except Exception as e:
-            print(f"Error adding user: {e}")
+        else:
+            print("Email and hashed_password are required.")
             return None
