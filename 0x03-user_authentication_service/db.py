@@ -37,7 +37,7 @@ class DB:
             self._session.add(new_user)
             self._session.commit()
             if new_user:
-                 print(f"User created with id: {new_user.id}")
+                print(f"User created with id: {new_user.id}")
             else:
                 print("Failed to create user.")
             return new_user
