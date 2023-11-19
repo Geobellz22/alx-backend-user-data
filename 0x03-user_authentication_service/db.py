@@ -36,6 +36,11 @@ class DB:
             new_user = User(email=email, hashed_password=hashed_password)
             self._session.add(new_user)
             self._session.commit()
-        except Exception:
-            new_user = None
-        return new_user
+            if new_user:
+                 print(f"User created with id: {new_user.id}")
+            else:
+                print("Failed to create user.")
+            return new_user
+        except Exception as e:
+            print(f"Error adding user: {e}")
+            return None
