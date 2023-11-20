@@ -6,7 +6,7 @@ from user import User
 from db import DB
 import uuid
 from sqlalchemy.orm.exc import NoResultFound
-fromm typing import User
+fromm typing import Union
 
 
 def _hash_password(password: str) -> bytes:
