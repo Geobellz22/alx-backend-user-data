@@ -8,7 +8,6 @@ import uuid
 from sqlalchemy.orm.exc import NoResultFound
 
 
-
 def _hash_password(password: str) -> bytes:
     """hash input password"""
     salt = bcrypt.gensalt()
