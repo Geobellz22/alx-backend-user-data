@@ -15,7 +15,7 @@ class Auth:
 
         if len(path) == 14:
             path = f"{path}/"
-         if path in excluded_paths:
+        if path in excluded_paths:
             return False
 
         for ex_path in excluded_paths:
@@ -39,3 +39,4 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """Method to get the current user"""
         return None
+    
