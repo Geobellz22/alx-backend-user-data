@@ -26,6 +26,7 @@ elif AUTH_TYPE == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
 
+
 @app.before_request
 def before_request():
     """Runs before request"""
@@ -45,20 +46,24 @@ def before_request():
             abort(403)
     request.current_user = auth.current_user(request)
 
+
 @app.errorhandler(404)
 def not_found(error):
     """ Not found handler """
     return jsonify({"error": "Not found"}), 404
+
 
 @app.errorhandler(401)
 def unauthorized(error):
     """unauthorized"""
     return jsonify({"error": "Unauthorized"}), 401
 
+
 @app.errorhandler(403)
 def Forbidden(error):
     """Forbidden"""
     return jsonify({"error": "Forbidden"}), 403
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
